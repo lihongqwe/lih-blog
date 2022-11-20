@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lih.blogsystem.dao.ArticleDao">
+
+    <resultMap type="com.lih.blogsystem.entity.Article" id="ArticleMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="categoryId" column="category_id" jdbcType="INTEGER"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="summary" column="summary" jdbcType="VARCHAR"/>
+        <result property="content" column="content" jdbcType="VARCHAR"/>
+        <result property="url" column="url" jdbcType="VARCHAR"/>
+        <result property="top" column="top" jdbcType="INTEGER"/>
+        <result property="visible" column="visible" jdbcType="INTEGER"/>
+        <result property="words" column="words" jdbcType="INTEGER"/>
+        <result property="views" column="views" jdbcType="INTEGER"/>
+        <result property="readingTime" column="reading_time" jdbcType="INTEGER"/>
+        <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+        <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="ArticleMap">
+        select id,
+               user_id,
+               category_id,
+               title,
+               summary,
+               content,
+               url,
+               top,
+               visible,
+               words,
+               views,
+               reading_time,
+               created_at,
+               updated_at
+        from article
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="ArticleMap">
+        select
+        id, user_id, category_id, title, summary, content, url, top, visible, words, views, reading_time, created_at,
+        updated_at
+        from article
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+            <if test="title != null and title != ''">
+                and title = #{title}
+            </if>
+            <if test="summary != null and summary != ''">
+                and summary = #{summary}
+            </if>
+            <if test="content != null and content != ''">
+                and content = #{content}
+            </if>
+            <if test="url != null and url != ''">
+                and url = #{url}
+            </if>
+            <if test="top != null">
+                and top = #{top}
+            </if>
+            <if test="visible != null">
+                and visible = #{visible}
+            </if>
+            <if test="words != null">
+                and words = #{words}
+            </if>
+            <if test="views != null">
+                and views = #{views}
+            </if>
+            <if test="readingTime != null">
+                and reading_time = #{readingTime}
+            </if>
+            <if test="createdAt != null">
+                and created_at = #{createdAt}
+            </if>
+            <if test="updatedAt != null">
+                and updated_at = #{updatedAt}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from article
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+            <if test="title != null and title != ''">
+                and title = #{title}
+            </if>
+            <if test="summary != null and summary != ''">
+                and summary = #{summary}
+            </if>
+            <if test="content != null and content != ''">
+                and content = #{content}
+            </if>
+            <if test="url != null and url != ''">
+                and url = #{url}
+            </if>
+            <if test="top != null">
+                and top = #{top}
+            </if>
+            <if test="visible != null">
+                and visible = #{visible}
+            </if>
+            <if test="words != null">
+                and words = #{words}
+            </if>
+            <if test="views != null">
+                and views = #{views}
+            </if>
+            <if test="readingTime != null">
+                and reading_time = #{readingTime}
+            </if>
+            <if test="createdAt != null">
+                and created_at = #{createdAt}
+            </if>
+            <if test="updatedAt != null">
+                and updated_at = #{updatedAt}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into article(user_id, category_id, title, summary, content, url, top, visible, words, views,
+                            reading_time, created_at, updated_at)
+        values (#{userId}, #{categoryId}, #{title}, #{summary}, #{content}, #{url}, #{top}, #{visible}, #{words},
+                #{views}, #{readingTime}, #{createdAt}, #{updatedAt})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into article(user_id, category_id, title, summary, content, url, top, visible, words, views,
+        reading_time, created_at, updated_at)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userId}, #{entity.categoryId}, #{entity.title}, #{entity.summary}, #{entity.content},
+            #{entity.url}, #{entity.top}, #{entity.visible}, #{entity.words}, #{entity.views}, #{entity.readingTime},
+            #{entity.createdAt}, #{entity.updatedAt})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into article(user_id, category_id, title, summary, content, url, top, visible, words, views,
+        reading_time, created_at, updated_at)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.userId}, #{entity.categoryId}, #{entity.title}, #{entity.summary}, #{entity.content},
+            #{entity.url}, #{entity.top}, #{entity.visible}, #{entity.words}, #{entity.views}, #{entity.readingTime},
+            #{entity.createdAt}, #{entity.updatedAt})
+        </foreach>
+        on duplicate key update
+        user_id = values(user_id),
+        category_id = values(category_id),
+        title = values(title),
+        summary = values(summary),
+        content = values(content),
+        url = values(url),
+        top = values(top),
+        visible = values(visible),
+        words = values(words),
+        views = values(views),
+        reading_time = values(reading_time),
+        created_at = values(created_at),
+        updated_at = values(updated_at)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update article
+        <set>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="categoryId != null">
+                category_id = #{categoryId},
+            </if>
+            <if test="title != null and title != ''">
+                title = #{title},
+            </if>
+            <if test="summary != null and summary != ''">
+                summary = #{summary},
+            </if>
+            <if test="content != null and content != ''">
+                content = #{content},
+            </if>
+            <if test="url != null and url != ''">
+                url = #{url},
+            </if>
+            <if test="top != null">
+                top = #{top},
+            </if>
+            <if test="visible != null">
+                visible = #{visible},
+            </if>
+            <if test="words != null">
+                words = #{words},
+            </if>
+            <if test="views != null">
+                views = #{views},
+            </if>
+            <if test="readingTime != null">
+                reading_time = #{readingTime},
+            </if>
+            <if test="createdAt != null">
+                created_at = #{createdAt},
+            </if>
+            <if test="updatedAt != null">
+                updated_at = #{updatedAt},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from article
+        where id = #{id}
+    </delete>
+
+</mapper>
+
