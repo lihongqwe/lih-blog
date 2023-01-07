@@ -28,6 +28,7 @@ mybatis:
   type-aliases-package: com.lih.blogsystem.entity
   mapper-locations: classpath*:mapper/*Dao.xml
 
+
 # 分页插件
 pagehelper:
   helperDialect: mysql
