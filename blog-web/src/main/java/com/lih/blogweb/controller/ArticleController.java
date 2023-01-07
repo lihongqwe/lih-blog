@@ -18,6 +18,7 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("article")
 public class ArticleController {
+
     /**
      * 服务对象
      */
